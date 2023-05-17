@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Response
 
 from yellow_taxi_data.database.postgres import Timescale
 
@@ -17,7 +17,8 @@ async def get_daily_aggs():
         dict: Dictionary with aggregate stats.
     """
     timescale = Timescale()
-    return await timescale.get_daily_aggregate()
+    data = await timescale.get_daily_aggregate()
+    return Response(content=data, media_type="application/json")
 
 
 @router.get("/get_hourly_aggs")
@@ -28,4 +29,5 @@ async def get_hourly_aggs():
         dict: Dictionary with aggregate stats.
     """
     timescale = Timescale()
-    return await timescale.get_hourly_aggregate()
+    data = await timescale.get_hourly_aggregate()
+    return Response(content=data, media_type="application/json")
