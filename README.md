@@ -22,7 +22,9 @@ fares or to help the taxi service decide where to place their cars.
 ### Tradeoffs
 A few tradeoffs were made in the design of this project. The first is that the data was uploaded manually to the
 database. Without a running Airflow instance, it was not possible to automate the data upload (and local Airflow might
-not have cut it for this project). The second tradeoff was choosing to use a basic aggregate function to get the
+not have cut it for this project; though I started down that path, as one can see with [this repo](https://github.com/smithjustinm/airflow_operations)).
+
+The second tradeoff was choosing to use a basic aggregate function to get the
 distance percentile instead of relying on the Timescale hyperfunction. However, the table used is a hypertable, which
 does result in better performance.
 
