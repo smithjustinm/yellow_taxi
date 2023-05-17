@@ -26,10 +26,10 @@ class AppSettings(BaseSettings):
 
     # TimescaleDB connection string
     HOST: str = os.getenv("host")
-    PORT: str = os.getenv("port")
-    USER: str = os.getenv("user")
+    PORT: str = "32217"
+    USER: str = "tsdbadmin"
     PASSWORD: str = os.getenv("password")
-    DBNAME: str = os.getenv("dbname")
+    DBNAME: str = "tsdb"
     TIMESCALE_CONNECTION_STRING: str = (
         f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}"
     )
