@@ -121,19 +121,19 @@ class Timescale:
         query = self.queries["get_distance_by_percentile"]
         logger.info("reading data from query")
         data = Timescale.engine.get_sql_data(query)
-        return data.to_dict(orient="records")
+        return data.to_json(orient="records")
 
-    def get_daily_aggregate(self):
+    async def get_daily_aggregate(self):
         """returns dict of daily aggregates that roll up on passenger count and fare"""
         query = self.queries["get_daily_aggregate"]
         logger.info("reading data from query")
         data = Timescale.engine.get_sql_data(query)
-        return data.to_dict(orient="records")
+        return data.to_json(orient="records")
 
-    def get_hourly_aggregate(self):
+    async def get_hourly_aggregate(self):
         """returns a dict of hourly aggregates that roll up
         on passenger count and fare"""
         query = self.queries["get_hourly_aggregate"]
         logger.info("reading data from query")
         data = Timescale.engine.get_sql_data(query)
-        return data.to_dict(orient="records")
+        return data.to_json(orient="records")
