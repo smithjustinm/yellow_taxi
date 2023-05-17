@@ -31,9 +31,9 @@ does result in better performance.
 The daily data drops to Salesforce could be handled in a few ways. The most common is to use a tool like Airflow to
 schedule the data drops. Custom operators make it easy to connect to Salesforce and upload the data. Using tools like
 Astronomer, it is easy to deploy Airflow to the cloud and schedule the data drops. A (very) basic design for a gitflow
-workflow is shown below:
+workflow is shown below via the link:
 
-![Basic Astronomer/Airflow Setup](/Users/Justin/Downloads/Blank diagram.png)
+[Astronomer-Gitflow](https://lucid.app/lucidchart/669f5feb-2bc5-437e-9566-5ce07d0e328b/edit?viewport_loc=207%2C323%2C1489%2C1045%2C0_0&invitationId=inv_1bae5d5f-3944-46cc-9782-fb428f2c80ba)
 
 #### Backfilling
 Backfilling data is a common task in data engineering. In this case, the data drops would need to be backfilled to
