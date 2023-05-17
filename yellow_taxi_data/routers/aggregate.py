@@ -17,7 +17,7 @@ async def get_daily_aggs():
         dict: Dictionary with aggregate stats.
     """
     timescale = Timescale()
-    return timescale.get_daily_aggregate()
+    return await timescale.get_daily_aggregate()
 
 
 @router.get("/get_hourly_aggs")
@@ -28,4 +28,4 @@ async def get_hourly_aggs():
         dict: Dictionary with aggregate stats.
     """
     timescale = Timescale()
-    return timescale.get_hourly_aggregate()
+    return await timescale.get_hourly_aggregate()
