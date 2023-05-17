@@ -14,13 +14,3 @@ def child_exit(server, worker):
         worker: gunicorn worker object
     """
     multiprocess.mark_process_dead(worker.pid)
-
-
-errorlog = "-"  # https://docs.gunicorn.org/en/latest/settings.html#errorlog
-bind = "0.0.0.0:9000"  # https://docs.gunicorn.org/en/latest/settings.html#bind
-# https://docs.gunicorn.org/en/latest/settings.html#worker-class
-worker_class = "uvicorn.workers.UvicornWorker"
-worker_tmp_dir = (
-    "/dev/shm"  # nosec https://docs.gunicorn.org/en/latest/settings.html#worker-tmp-dir
-)
-workers = "2"  # https://docs.gunicorn.org/en/latest/settings.html#workers

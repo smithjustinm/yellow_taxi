@@ -61,7 +61,7 @@ class DatabaseEngine:
 
     def get_sql_data(self, query, *args, **kwargs):
         """
-        Utility function to read data from sql query, raises exception if query fails
+        Utility function to read data from sql query, raises exception if query fails.
         params: query, engine, *args, **kwargs
         """
         try:
@@ -115,7 +115,25 @@ class Timescale:
         root = os.path.dirname(os.path.realpath(__file__))
         self.queries = Timescale.engine.read_sql(os.path.join(root, "./sql"))
 
-    def get_distance_by_percentile(self, percentile: float):
-        """returns json list of all trips where the distance traveled is
+    async def get_distance_by_percentile(self):
+        """returns dict of all trips where the distance traveled is
         within the percentile given"""
-        pass
+        query = self.queries["get_distance_by_percentile"]
+        logger.info("reading data from query")
+        data = Timescale.engine.get_sql_data(query)
+        return data.to_dict(orient="records")
+
+    def get_daily_aggregate(self):
+        """returns dict of daily aggregates that roll up on passenger count and fare"""
+        query = self.queries["get_daily_aggregate"]
+        logger.info("reading data from query")
+        data = Timescale.engine.get_sql_data(query)
+        return data.to_dict(orient="records")
+
+    def get_hourly_aggregate(self):
+        """returns a dict of hourly aggregates that roll up
+        on passenger count and fare"""
+        query = self.queries["get_hourly_aggregate"]
+        logger.info("reading data from query")
+        data = Timescale.engine.get_sql_data(query)
+        return data.to_dict(orient="records")

@@ -44,11 +44,11 @@ class ReadyModel(BaseModel):
 
     Attributes:
         ready (bool): Am I ready?
-        description (str): as there are no services to check is an empty string
+        description (str): Description of readiness
     """
 
     ready: bool = True
-    description: str = ""
+    description: str = "yellow_taxi_data is ready"
 
 
 @router.get("/")

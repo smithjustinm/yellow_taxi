@@ -24,49 +24,31 @@ def edit_event_name(_, __, event_dict: Dict[Any, Any]) -> Dict[Any, Any]:
         The modified logging event dictionary
     """
     event = event_dict.pop("event")
-    event_dict["event_content"] = event
+    event_dict["message"] = event
     return event_dict
 
 
 STD_LIB_PROCESSORS = [
-    # Add these bits of information to the event_dict if the log entry
-    # is not from structlog.
-    # change the event name to message
     edit_event_name,
-    # Add the name of the logger to event dict.
     structlog.stdlib.add_logger_name,
-    # Add log level to event dict.
     structlog.stdlib.add_log_level,
-    # Add a timestamp in ISO 8601 format.
     structlog.processors.TimeStamper(fmt="iso"),
+    structlog.processors.StackInfoRenderer(),
+    structlog.processors.format_exc_info,
 ]
 
 
 STRUCTLOG_PROCESSORS = [
-    # If log level is too low, abort pipeline and throw away log entry.
-    structlog.stdlib.filter_by_level,
-    # change the event name to message
     edit_event_name,
-    # Add the name of the logger to event dict.
-    structlog.stdlib.add_logger_name,
-    # Add log level to event dict.
-    structlog.stdlib.add_log_level,
-    # Perform %-style formatting.
-    structlog.stdlib.PositionalArgumentsFormatter(),
+    structlog.contextvars.merge_contextvars,
     # Add a timestamp in ISO 8601 format.
     structlog.processors.TimeStamper(fmt="iso"),
-    # If the "stack_info" key in the event dict is true, remove it and
-    # render the current stack trace in the "stack" key.
+    structlog.stdlib.add_log_level,
+    structlog.stdlib.filter_by_level,
+    structlog.stdlib.add_logger_name,
+    structlog.stdlib.PositionalArgumentsFormatter(),
     structlog.processors.StackInfoRenderer(),
-    # Sets "exc_info" key if the method name is "exception" and exc_info not set
-    structlog.dev.set_exc_info,
-    # If the "exc_info" key in the event dict is either true or a
-    # sys.exc_info() tuple, remove "exc_info" and render the exception
-    # with traceback into the "exception" key.
     structlog.processors.format_exc_info,
-    # If some value is in bytes, decode it to a unicode str.
     structlog.processors.UnicodeDecoder(),
-    # Wrap logger, name, and event_dict.
-    # The result is later unpacked by ProcessorFormatter when formatting log entries.
     structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
 ]

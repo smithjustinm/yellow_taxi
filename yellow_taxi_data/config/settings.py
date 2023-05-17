@@ -30,7 +30,7 @@ class AppSettings(BaseSettings):
     USER: str = os.getenv("user")
     PASSWORD: str = os.getenv("password")
     DBNAME: str = os.getenv("dbname")
-    TIMESCALEDB_CONNECTION_STRING: str = (
+    TIMESCALE_CONNECTION_STRING: str = (
         f"postgresql://{USER}:{PASSWORD}@{HOST}:{PORT}/{DBNAME}"
     )
 

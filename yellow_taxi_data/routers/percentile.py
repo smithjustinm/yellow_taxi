@@ -1,34 +1,22 @@
 """Percentile fastapi router for the yellow_taxi_data app."""
-from typing import List
 
 from fastapi import APIRouter
-from pydantic import BaseModel
+
+from yellow_taxi_data.database.postgres import Timescale
 
 router = APIRouter(
-    prefix="/percentile_distance",
-    tags=["percentile_distance"],
+    prefix="/distance",
+    tags=["distance"],
     responses={404: {"description": "Not found"}},
 )
 
 
-class Percentile(BaseModel):
-    """Percentile model that will be used to return a list of all trip distances
-    for a given percentile.
-
-    Attributes:
-        percentile (int): Percentile
-        trip_distance (List[float]): List of trip distances
-    """
-
-    percentile: int = 0
-    trip_distance: List[float] = []
-
-
-@router.get("/percentile_distance")
-async def get_percentile_distance() -> Percentile:
-    """Get the percentile for a given trip distance.
+@router.get("/get_90th_percentile")
+async def get_percentile_distance():
+    """Get the percentile for a given trip distance from the database.
 
     Returns:
-        (Percentile): Percentile
+        dict: Dictionary with all trips above 90th percentile for trip distance.
     """
-    return Percentile()
+    timescale = Timescale()
+    return await timescale.get_distance_by_percentile()

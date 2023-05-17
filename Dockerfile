@@ -1,36 +1,28 @@
 FROM python:3.9
 
-ENV PYTHONUNBUFFERED 1
-WORKDIR /app
-
-# add the workdir to the python path
-ENV PYTHONPATH=/app
-
+ENV PYTHONPATH=/usr/src/app
 # necessary to store prometheus temp files for cross process communication (e.g. gunicorn -w)
 ENV prometheus_multiproc_dir=/tmp
-ENV LOG_LEVEL=INFO
-
 # https://github.com/encode/uvicorn/issues/589 uvicorn + gunicorn proxy settings
 ENV FORWARDED_ALLOW_IPS="*"
 
-# disable libeatmydata
-ENV LD_PRELOAD=
+# set the workdir
+WORKDIR /usr/src/app
 
 # set environment
-ENV RELEASE_VERSION=${RELEASE_VERSION}
+RUN mkdir -p .tox && \
+    groupadd -r app &&\
+    useradd -r -g app -d /usr/src/app -s /sbin/nologin -c "DockerUser" app && \
+    mkdir -p /usr/src/app && \
+    chown -R app /usr/src/app
 
-RUN groupadd -r app && \
-    useradd -r -g app -d /app -s /sbin/nologin -c "DockerUser" app && \
-    mkdir -p /app && \
-    chown -R app /app
+COPY yellow_taxi_data ./yellow_taxi_data
+COPY ./requirements.txt ./requirements.txt
+COPY tests ./tests
 
-COPY poetry.lock pyproject.toml /app/
+RUN python -m pip install -r requirements.txt
 
-RUN pip3 install poetry==1.4.2
+COPY tests ./tests
 
-RUN poetry config virtualenvs.create false
-
-EXPOSE 9000
+# set user
 USER app
-
-ENTRYPOINT gunicorn -c "python:yellow_taxi_data.gunicorn_config" --preload "yellow_taxi_data.main:app"
