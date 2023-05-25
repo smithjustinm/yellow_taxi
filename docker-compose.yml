@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  web:
+    restart: always
+    build:
+        context: ./
+        dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    env_file:
+      - secrets.env
+    ports:
+      - 9000:9000
+    command: gunicorn -c python:yellow_taxi_data.config.gunicorn_config -w 2 --threads 2 --worker-tmp-dir /tmp --log-file - -k uvicorn.workers.UvicornWorker -b 0.0.0.0:9000 --reload 'yellow_taxi_data.main:start()'
